@@ -10,8 +10,11 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/graveFinderMain.fxml"));
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Gravefinder");
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
+        // primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 

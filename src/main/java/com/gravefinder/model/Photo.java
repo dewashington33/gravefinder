@@ -3,14 +3,20 @@ package com.gravefinder.model;
 public class Photo {
     private int photoId;
     private String path;
+    private String caption;
     private String dateCreated;
     private String type;
 
-    public Photo(int photoId, String path, String dateCreated, String type) {
+    public Photo(int photoId, String path, String caption, String dateCreated, String type) {
         this.setPhotoId(photoId);
         this.setPath(path);
+        this.setCaption(caption);
         this.setDateCreated(dateCreated);
         this.setType(type);
+    }
+
+    public Photo() {
+
     }
 
     public int getPhotoId() {
@@ -27,6 +33,14 @@ public class Photo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     public String getDateCreated() {

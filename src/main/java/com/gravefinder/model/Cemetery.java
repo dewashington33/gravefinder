@@ -17,7 +17,8 @@ public class Cemetery {
     private List<Memorial> memorials;
 
     public Cemetery(int cemeteryId, String name, String cemLatitude, String cemLongitude, String cityName,
-            String countyName, String stateName, String linkToShare, String defaultPhotoToShare) {
+            String countyName, String stateName, String linkToShare, String defaultPhotoToShare,
+            List<Photo> photos, List<Memorial> memorials) {
         this.setCemeteryId(cemeteryId);
         this.setName(name);
         this.setCemLatitude(cemLatitude);
@@ -27,8 +28,8 @@ public class Cemetery {
         this.setStateName(stateName);
         this.setLinkToShare(linkToShare);
         this.setDefaultPhotoToShare(defaultPhotoToShare);
-        this.photos = new ArrayList<>();
-        this.memorials = new ArrayList<>();
+        this.photos = photos != null ? photos : new ArrayList<>();
+        this.memorials = memorials != null ? memorials : new ArrayList<>();
     }
 
     public int getCemeteryId() {

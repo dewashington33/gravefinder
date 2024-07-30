@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - App",
+            "request": "launch",
+            "mainClass": "com.gravefinder.App",
+            "projectName": "gravefinder",
+            "vmArgs": "--module-path \"C:/Program Files/JavaFX/javafx-sdk-22.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+        }
+    ]
+}

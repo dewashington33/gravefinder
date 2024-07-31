@@ -6,6 +6,7 @@ import java.util.List;
 import com.gravefinder.model.Cemetery;
 import com.gravefinder.model.Memorial;
 import com.gravefinder.model.Photo;
+import com.gravefinder.scraping.SeleniumScraper;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,23 +28,29 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        Photo photo1 = new Photo(15982645,
-                "https://images.findagrave.com/photos/2009/66/CEM46924123_123653303505.jpg", "-",
-                "08 Mar 2009", "Photo");
-        Photo photo2 = new Photo(15982645,
-                "https://images.findagrave.com/photos/2009/66/CEM46924123_123653303505.jpg",
-                "-", "08 Mar 2009", "Photo");
+        SeleniumScraper scraper = new SeleniumScraper();
+        scraper.scrapeWebsite("https://www.findagrave.com/cemetery/33862");
+        scraper.close();
+        // Photo photo1 = new Photo(15982645,
+        // "https://images.findagrave.com/photos/2009/66/CEM46924123_123653303505.jpg",
+        // "-",
+        // "08 Mar 2009", "Photo");
+        // Photo photo2 = new Photo(15982645,
+        // "https://images.findagrave.com/photos/2009/66/CEM46924123_123653303505.jpg",
+        // "-", "08 Mar 2009", "Photo");
 
-        // Photo photo2 = new Photo(2620437,
+        // // Photo photo2 = new Photo(2620437,
+        // //
         // "https://images.findagrave.com/photos/2006/45/CEM46603620_114004788700.jpg",
-        // "- This old cemetery has beautiful large trees draped in spanish moss.", "15
-        // Feb 2006", "Photo");
-        List<Photo> photos = Arrays.asList(photo1, photo2);
-        Cemetery cemetery = new Cemetery(33862, "Evergreen Cemetery", "32.45537",
-                "-83.73634", "Perry", "Houston",
-                "Georgia", "https://www.findagrave.com/cemetery/33862/evergreen-cemetery",
-                "https://images.findagrave.com/icons2/fg-logo-square.png", photos, null);
-        System.out.println(cemetery);
+        // // "- This old cemetery has beautiful large trees draped in spanish moss.",
+        // "15
+        // // Feb 2006", "Photo");
+        // List<Photo> photos = Arrays.asList(photo1, photo2);
+        // Cemetery cemetery = new Cemetery(33862, "Evergreen Cemetery", "32.45537",
+        // "-83.73634", "Perry", "Houston",
+        // "Georgia", "https://www.findagrave.com/cemetery/33862/evergreen-cemetery",
+        // "https://images.findagrave.com/icons2/fg-logo-square.png", photos, null);
+        // System.out.println(cemetery);
 
         // Memorial memorial = new Memorial();
         // memorial.setMemorialId(1);

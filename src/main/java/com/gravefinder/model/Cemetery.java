@@ -130,17 +130,17 @@ public class Cemetery {
 
     @Override
     public String toString() {
-        return "Cemetery " + name + '\n' +
-                "cemeteryId='" + cemeteryId + "'" + '\n' +
-                "name='" + name + "'" + '\n' +
-                "cemLatitude='" + cemLatitude + "'" + '\n' +
-                "cemLongitude='" + cemLongitude + "'" + '\n' +
-                "cityName='" + cityName + "'" + '\n' +
-                "countyName='" + countyName + "'" + '\n' +
-                "stateName='" + stateName + "'" + '\n' +
-                "linkToShare='" + linkToShare + "'" + '\n' +
-                "defaultPhotoToShare='" + defaultPhotoToShare + "'" + '\n' +
-                "photos=" + photos +
+        return "Cemetery: " + name + '\n' +
+                "cemeteryId: " + cemeteryId + '\n' +
+                "name=: " + name + '\n' +
+                "cemLatitude: " + cemLatitude + '\n' +
+                "cemLongitude: " + cemLongitude + '\n' +
+                "cityName: " + cityName + '\n' +
+                "countyName: " + countyName + '\n' +
+                "stateName: " + stateName + '\n' +
+                "linkToShare: " + linkToShare + '\n' +
+                "defaultPhotoToShare: " + defaultPhotoToShare + '\n' +
+                "photos: " + photos +
                 '}';
     }
 

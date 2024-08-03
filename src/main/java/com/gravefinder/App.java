@@ -1,5 +1,6 @@
 package com.gravefinder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,11 +30,13 @@ public class App extends Application {
 
     public static void main(String[] args) {
         SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 33862);
-        // Returns a cemetery object
+        ArrayList<Memorial> memorial = scraper.scrapeMemorials(scraper.getCemeteryId());
+        System.out.println(memorial);
 
-        Cemetery cemetery = scraper.scrapeCemetery("https://www.findagrave.com/cemetery/33862");
-        System.out.println(cemetery);
-        scraper.close();
+        // Cemetery cemetery =
+        // scraper.scrapeCemetery("https://www.findagrave.com/cemetery/33862");
+        // System.out.println(cemetery);
+        // scraper.close();
         // Photo photo1 = new Photo(15982645,
         // "https://images.findagrave.com/photos/2009/66/CEM46924123_123653303505.jpg",
         // "-",

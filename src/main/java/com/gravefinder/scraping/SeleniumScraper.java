@@ -124,84 +124,57 @@ public class SeleniumScraper {
         return cemetery;
     }
 
-    public ArrayList<Memorial> scrapeMemorials(int cemeteryId) {
-        String url = "https://www.findagrave.com/cemetery/" + cemeteryId + "/memorial-search";
+    public ArrayList<String> scrapeMemorialLinks(int cemeteryId) {
+        // First have to get the cemetery name
+        String url = "https://www.findagrave.com/cemetery/" + cemeteryId;
+        driver.get(url);
+        // Find the h1 element where the class starts with an itemprop attribute value
+        // of "name" and extract the value of the element
+        WebElement cemeteryName = driver.findElement(By.xpath("//h1[starts-with(@class, 'bio-name')]"));
+        // Now build the URL for the memorial search page
+        url = "https://www.findagrave.com/cemetery/" + cemeteryId + "/memorial-search?"
+                + cemeteryName.getText().replace(" ", "+");
         driver.get(url);
 
-        ArrayList<Memorial> memorials = new ArrayList<>();
+        ArrayList<String> memorialLinks = new ArrayList<>();
         JavascriptExecutor js = (JavascriptExecutor) driver;
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        int previousSize = 0;
-        int currentSize = 0;
+        // Find the settings button and click it
+        WebElement settingsButton = driver.findElement(By.id("settingsOptions"));
+        settingsButton.click();
+        // now look for the id="condensedLists" and click it
+        WebElement scrollLists = driver.findElement(By.id("scrollLists"));
+        scrollLists.click();
 
-        do {
-            previousSize = currentSize;
-
-            // Scroll down to load more records
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-
-            // Wait for new elements to load
-            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
-                    By.xpath(
-                            "//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"),
-                    previousSize));
-
-            // Find all anchor tags with the specified class
-            List<WebElement> memorialLinks = driver.findElements(By.xpath(
-                    "//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"));
-
-            currentSize = memorialLinks.size();
-
-            for (int i = previousSize; i < currentSize; i++) {
-                try {
-                    // Re-locate the elements after navigating back
-                    memorialLinks = driver.findElements(By.xpath(
-                            "//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"));
-
-                    WebElement link = memorialLinks.get(i);
-
-                    // Scroll the element into view
-                    js.executeScript("arguments[0].scrollIntoView(true);", link);
-
-                    // Extract the href attribute
-                    String href = link.getAttribute("href");
-
-                    // Parse the memorialId from the href
-                    String memorialId = href.split("/memorial/")[1].split("/")[0];
-                    int memorialIdInt = Integer.parseInt(memorialId);
-                    System.out.println("Memorial ID: " + memorialIdInt);
-
-                    // Click on the link
-                    link.click();
-
-                    // You can add code here to scrape the memorial details after clicking the link
-                    // For now, we'll just create a Memorial object with the memorialId
-                    // Memorial memorial = new Memorial(memorialIdInt, cemeteryId, "", "", 0, 0, 0,
-                    // 0, "", "");
-                    // memorials.add(memorial);
-
-                    // Navigate back to the search results page
-                    driver.navigate().back();
-
-                    // Wait for the page to load and elements to be available
-                    wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-                            "//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]")));
-                } catch (StaleElementReferenceException e) {
-                    // Handle the exception by re-locating the elements
-                    memorialLinks = driver.findElements(By.xpath(
-                            "//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"));
-                    i--; // Retry the current index
-                } catch (ElementClickInterceptedException e) {
-                    // Handle the exception by scrolling the element into view and retrying
-                    WebElement link = memorialLinks.get(i);
-                    js.executeScript("arguments[0].scrollIntoView(true);", link);
-                    i--; // Retry the current index
-                }
+        // Click the nextPageButton until it is no longer present
+        while (true) {
+            try {
+                WebElement nextPageButton = driver.findElement(By.id("load-next-page"));
+                nextPageButton.click();
+                // Wait for the next page to load
+                wait.until(ExpectedConditions.stalenessOf(nextPageButton));
+            } catch (Exception e) {
+                // Break the loop if the nextPageButton is not found
+                break;
             }
-        } while (currentSize > previousSize);
+        }
 
-        return memorials;
+        // Scroll to the top of the page
+        js.executeScript("window.scrollTo(0, 0);");
+
+        // Find all div elements with the class containing 'memorial-item'
+        List<WebElement> memorialItems = driver.findElements(By.xpath("//div[contains(@class, 'memorial-item')]"));
+
+        // Extract the href attribute from the anchor elements under these div elements
+        for (WebElement item : memorialItems) {
+            WebElement link = item.findElement(By.xpath(
+                    ".//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"));
+            String href = link.getAttribute("href");
+            memorialLinks.add(href);
+        }
+
+        return memorialLinks;
     }
 
     public void close() {

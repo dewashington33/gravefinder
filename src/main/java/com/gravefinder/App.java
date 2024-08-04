@@ -30,8 +30,8 @@ public class App extends Application {
 
     public static void main(String[] args) {
         SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 33862);
-        ArrayList<Memorial> memorial = scraper.scrapeMemorials(scraper.getCemeteryId());
-        System.out.println(memorial);
+        ArrayList<String> memorialLinks = scraper.scrapeMemorialLinks(33862);
+        System.out.println(memorialLinks);
 
         // Cemetery cemetery =
         // scraper.scrapeCemetery("https://www.findagrave.com/cemetery/33862");

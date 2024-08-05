@@ -150,42 +150,6 @@ public class SeleniumScraper {
         WebElement scrollLists = driver.findElement(By.id("scrollLists"));
         scrollLists.click();
 
-        // while (true) {
-        // try {
-        // WebElement nextPageButton = driver.findElement(By.id("load-next-page"));
-
-        // // Scroll the button into view
-        // ((JavascriptExecutor)
-        // driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
-
-        // // Using JavaScript to click the button because it may be hidden
-        // ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-        // nextPageButton);
-
-        // // Wait for new content to load (e.g., a new 'memorial-item' element)
-        // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        // wait.until(ExpectedConditions
-        // .presenceOfElementLocated(By.xpath("//div[contains(@class,
-        // 'memorial-item')]")));
-
-        // // Add a longer delay to allow the new content to load
-        // Thread.sleep(5000);
-        // } catch (NoSuchElementException e) {
-        // System.out.println("Next page button not found, breaking the loop.");
-        // break;
-        // } catch (InterruptedException e) {
-        // System.out.println("Thread was interrupted, breaking the loop.");
-        // break;
-        // } catch (WebDriverException e) {
-        // System.out.println(
-        // "Timeout waiting for the next page to load or other WebDriver error: " +
-        // e.getMessage());
-        // break;
-        // } catch (Exception e) {
-        // System.out.println("An unexpected error occurred: " + e.getMessage());
-        // break;
-        // }
-        // }
         int previousItemCount = 0;
 
         while (true) {
@@ -238,15 +202,46 @@ public class SeleniumScraper {
         // Scroll to the top of the page
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
 
+        // Wait for all div elements with the class containing 'memorial-item' to be
+        // present
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
+        wait.until(ExpectedConditions
+                .presenceOfAllElementsLocatedBy(By.xpath("//div[contains(@class, 'memorial-item')]")));
+
         // Find all div elements with the class containing 'memorial-item'
         List<WebElement> memorialItems = driver.findElements(By.xpath("//div[contains(@class, 'memorial-item')]"));
 
         // Extract the href attribute from the anchor elements under these div elements
-        for (WebElement item : memorialItems) {
-            WebElement link = item.findElement(By.xpath(
-                    ".//a[contains(@class, 'd-flex align-items-center flex-grow-1 text-decoration-none col-print-3')]"));
-            String href = link.getAttribute("href");
-            memorialLinks.add(href);
+        // Counter for items without anchor elements
+        int noAnchorElementCount = 0;
+        for (int i = 0; i < memorialItems.size(); i++) {
+            try {
+                // Re-fetch the list of memorial items
+                memorialItems = driver.findElements(By.xpath("//div[contains(@class, 'memorial-item')]"));
+                WebElement item = memorialItems.get(i);
+
+                // Re-fetch the anchor element within the memorial-item div
+                List<WebElement> links = item.findElements(By.tagName("a"));
+                if (!links.isEmpty()) {
+                    WebElement link = links.get(0);
+                    wait.until(ExpectedConditions.visibilityOf(link));
+                    String href = link.getAttribute("href");
+                    memorialLinks.add(href);
+                } else {
+                    noAnchorElementCount++;
+                }
+            } catch (NoSuchElementException e) {
+                System.out.println("Anchor element not found in memorial-item: " + e.getMessage());
+            } catch (StaleElementReferenceException e) {
+                System.out.println("Stale element reference: " + e.getMessage());
+                // Re-fetch the element and retry
+                i--; // Decrement the counter to retry the current item
+            }
+        }
+
+        // Print the total count of items without anchor elements
+        if (noAnchorElementCount > 0) {
+            System.out.println("No anchor element found in " + noAnchorElementCount + " memorial-item(s).");
         }
 
         return memorialLinks;

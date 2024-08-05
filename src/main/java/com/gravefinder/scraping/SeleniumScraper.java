@@ -2,6 +2,8 @@ package com.gravefinder.scraping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.concurrent.TimeoutException;
 
 // import java.util.Map;
 
@@ -10,6 +12,7 @@ import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -138,7 +141,7 @@ public class SeleniumScraper {
 
         ArrayList<String> memorialLinks = new ArrayList<>();
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         // Find the settings button and click it
         WebElement settingsButton = driver.findElement(By.id("settingsOptions"));
@@ -147,21 +150,93 @@ public class SeleniumScraper {
         WebElement scrollLists = driver.findElement(By.id("scrollLists"));
         scrollLists.click();
 
-        // Click the nextPageButton until it is no longer present
+        // while (true) {
+        // try {
+        // WebElement nextPageButton = driver.findElement(By.id("load-next-page"));
+
+        // // Scroll the button into view
+        // ((JavascriptExecutor)
+        // driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
+
+        // // Using JavaScript to click the button because it may be hidden
+        // ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+        // nextPageButton);
+
+        // // Wait for new content to load (e.g., a new 'memorial-item' element)
+        // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        // wait.until(ExpectedConditions
+        // .presenceOfElementLocated(By.xpath("//div[contains(@class,
+        // 'memorial-item')]")));
+
+        // // Add a longer delay to allow the new content to load
+        // Thread.sleep(5000);
+        // } catch (NoSuchElementException e) {
+        // System.out.println("Next page button not found, breaking the loop.");
+        // break;
+        // } catch (InterruptedException e) {
+        // System.out.println("Thread was interrupted, breaking the loop.");
+        // break;
+        // } catch (WebDriverException e) {
+        // System.out.println(
+        // "Timeout waiting for the next page to load or other WebDriver error: " +
+        // e.getMessage());
+        // break;
+        // } catch (Exception e) {
+        // System.out.println("An unexpected error occurred: " + e.getMessage());
+        // break;
+        // }
+        // }
+        int previousItemCount = 0;
+
         while (true) {
             try {
                 WebElement nextPageButton = driver.findElement(By.id("load-next-page"));
-                nextPageButton.click();
-                // Wait for the next page to load
-                wait.until(ExpectedConditions.stalenessOf(nextPageButton));
+
+                // Scroll the button into view
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
+
+                // Using JavaScript to click the button because it may be hidden
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextPageButton);
+
+                // Wait for new content to load (e.g., a new 'memorial-item' element)
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+                wait.until(ExpectedConditions
+                        .presenceOfElementLocated(By.xpath("//div[contains(@class, 'memorial-item')]")));
+
+                // Add a longer delay to allow the new content to load
+                Thread.sleep(2000);
+
+                // Check the number of 'memorial-item' elements
+                List<WebElement> memorialItems = driver
+                        .findElements(By.xpath("//div[contains(@class, 'memorial-item')]"));
+                int currentItemCount = memorialItems.size();
+
+                // Break the loop if the number of items does not increase
+                if (currentItemCount <= previousItemCount) {
+                    System.out.println("No new items found, breaking the loop.");
+                    break;
+                }
+
+                // Update the previous item count
+                previousItemCount = currentItemCount;
+            } catch (NoSuchElementException e) {
+                System.out.println("Next page button not found, breaking the loop.");
+                break;
+            } catch (InterruptedException e) {
+                System.out.println("Thread was interrupted, breaking the loop.");
+                break;
+            } catch (WebDriverException e) {
+                System.out.println(
+                        "Timeout waiting for the next page to load or other WebDriver error: " + e.getMessage());
+                break;
             } catch (Exception e) {
-                // Break the loop if the nextPageButton is not found
+                System.out.println("An unexpected error occurred: " + e.getMessage());
                 break;
             }
         }
 
         // Scroll to the top of the page
-        js.executeScript("window.scrollTo(0, 0);");
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
 
         // Find all div elements with the class containing 'memorial-item'
         List<WebElement> memorialItems = driver.findElements(By.xpath("//div[contains(@class, 'memorial-item')]"));

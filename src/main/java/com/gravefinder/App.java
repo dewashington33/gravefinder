@@ -31,9 +31,15 @@ public class App extends Application {
     public static void main(String[] args) {
         // Houston Baptist ID is 34627
         // Evergreen Cemetery ID is 33862
+        // SeleniumScraper scraper = new
+        // SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
+        // ArrayList<String> memorialLinks = scraper.scrapeMemorialLinks();
+        // System.out.println(memorialLinks);
+
+        // Scrape memorials
         SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
-        ArrayList<String> memorialLinks = scraper.scrapeMemorialLinks(34627);
-        System.out.println(memorialLinks);
+        List<Memorial> memorials = scraper.scrapeMemorials();
+        System.out.println(memorials);
 
         // Cemetery cemetery =
         // scraper.scrapeCemetery("https://www.findagrave.com/cemetery/33862");

@@ -8,34 +8,29 @@ public class Memorial {
     private int cemeteryId;
     private String firstName;
     private String lastName;
-    private int birthYear;
-    private int deathYear;
-    private int deathMonth;
-    private int deathDay;
+    private String birthDate;
+    private String deathDate;
     private String defaultLinkToShare;
     private String defaultPhotoToShare;
     private List<Photo> photos;
 
-    public Memorial(int memorialId, int cemeteryId, String firstName, String lastName, int birthYear,
-            int deathYear,
-            int deathMonth, int deathDay, String defaultLinkToShare, String defaultPhotoToShare) {
+    public Memorial(int memorialId, int cemeteryId, String firstName, String lastName, String birthDate,
+            String deathDate, String defaultLinkToShare, String defaultPhotoToShare) {
         this.setMemorialId(memorialId);
-        this.setCemeteryId(deathDay);
+        this.setCemeteryId(cemeteryId);
         this.setFirstName(firstName);
         this.setLastName(lastName);
-        this.setBirthYear(birthYear);
-        this.setDeathYear(deathYear);
-        this.setDeathMonth(deathMonth);
-        this.setDeathDay(deathDay);
+        this.setBirthDate(birthDate);
+        this.setDeathDate(deathDate);
         this.setDefaultLinkToShare(defaultLinkToShare);
         this.setDefaultPhotoToShare(defaultPhotoToShare);
 
         this.photos = new ArrayList<>();
     }
 
-    public Memorial() {
+    // public Memorial() {
 
-    }
+    // }
 
     public int getMemorialId() {
         return memorialId;
@@ -69,36 +64,20 @@ public class Memorial {
         this.lastName = lastName;
     }
 
-    public int getBirthYear() {
-        return birthYear;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthYear(int birthYear) {
-        this.birthYear = birthYear;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public int getDeathYear() {
-        return deathYear;
+    public String getDeathDate() {
+        return deathDate;
     }
 
-    public void setDeathYear(int deathYear) {
-        this.deathYear = deathYear;
-    }
-
-    public int getDeathMonth() {
-        return deathMonth;
-    }
-
-    public void setDeathMonth(int deathMonth) {
-        this.deathMonth = deathMonth;
-    }
-
-    public int getDeathDay() {
-        return deathDay;
-    }
-
-    public void setDeathDay(int deathDay) {
-        this.deathDay = deathDay;
+    public void setDeathDate(String deathDate) {
+        this.deathDate = deathDate;
     }
 
     public String getDefaultLinkToShare() {
@@ -131,10 +110,8 @@ public class Memorial {
                 "memorialId=" + memorialId + '\n' +
                 "firstName='" + firstName + "'" + '\n' +
                 "lastName='" + lastName + "'" + '\n' +
-                "birthYear=" + birthYear + "'" + '\n' +
-                "deathYear=" + deathYear + "'" + '\n' +
-                "deathMonth=" + deathMonth + "'" + '\n' +
-                "deathDay=" + deathDay + "'" + '\n' +
+                "birthDate=" + birthDate + "'" + '\n' +
+                "deathDate=" + deathDate + "'" + '\n' +
                 "defaultLinkToShare='" + defaultLinkToShare + "'" + '\n' +
                 "defaultPhotoToShare='" + defaultPhotoToShare + "'" + '\n' +
                 "photos=" + photos + "'" + '\n' +

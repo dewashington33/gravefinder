@@ -127,7 +127,8 @@ public class SeleniumScraper {
         return cemetery;
     }
 
-    public ArrayList<String> scrapeMemorialLinks(int cemeteryId) {
+    public ArrayList<String> scrapeMemorialLinks() {
+
         // First have to get the cemetery name
         String url = "https://www.findagrave.com/cemetery/" + cemeteryId;
         driver.get(url);
@@ -245,6 +246,57 @@ public class SeleniumScraper {
         }
 
         return memorialLinks;
+    }
+
+    public ArrayList<Memorial> scrapeMemorials() {
+
+        ArrayList<String> memorialLinks = scrapeMemorialLinks();
+        ArrayList<Memorial> memorials = new ArrayList<>();
+
+        for (String link : memorialLinks) {
+            driver.get(link);
+
+            // Extract the memorial ID from the URL
+            // Extract the memorial birth date from the <time> tag with id 'birthDateLabel'
+            WebElement memorialIdElement = driver.findElement(By.className("copy-id"));
+            String memorialId = memorialIdElement.getAttribute("data-id");
+            int memorialIdInt = Integer.parseInt(memorialId);
+
+            // Extract the memorial name
+            WebElement memorialNameElement = driver.findElement(By.id("bio-name"));
+            String memorialName = memorialNameElement.getText();
+            // Rip out the last name by being the last string going left to where the first
+            // space is
+            String[] nameParts = memorialName.split(" ");
+            String lastName = nameParts[nameParts.length - 1];
+            // The first name may have the middle name in it also. But there is only one
+            // first name so if a middle then its part of the first name
+            String firstName = "";
+            for (int i = 0; i < nameParts.length - 1; i++) {
+                firstName += nameParts[i] + " ";
+            }
+
+            // Extract the memorial birth date from the <time> tag with id 'birthDateLabel'
+            WebElement birthDateElement = driver.findElement(By.id("birthDateLabel"));
+            String birthDate = birthDateElement.getText();
+
+            // Extract the memorial birth date from the <time> tag with id 'birthDateLabel'
+            WebElement deathDateElement = driver.findElement(By.id("deathDateLabel"));
+            String deathDate = deathDateElement.getText();
+
+            // Extract the default photo to share
+            WebElement mainPhotoElement = driver.findElement(By.id("main-photo"));
+            WebElement profileImageElement = mainPhotoElement.findElement(By.tagName("img"));
+            String defaultPhotoToShare = profileImageElement.getAttribute("src");
+
+            // Create a Memorial object
+            Memorial memorial = new Memorial(memorialIdInt, cemeteryId, firstName, lastName, birthDate,
+                    deathDate, link, defaultPhotoToShare);
+            memorials.add(memorial);
+
+        }
+
+        return memorials;
     }
 
     public void close() {

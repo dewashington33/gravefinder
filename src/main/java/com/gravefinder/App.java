@@ -38,7 +38,7 @@ public class App extends Application {
 
         // Scrape memorials
         SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
-        List<Memorial> memorials = scraper.scrapeMemorials();
+        ArrayList<Memorial> memorials = scraper.scrapeMemorials();
         System.out.println(memorials);
 
         // Cemetery cemetery =

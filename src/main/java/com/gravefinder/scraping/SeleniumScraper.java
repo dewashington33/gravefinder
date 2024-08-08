@@ -3,12 +3,12 @@ package com.gravefinder.scraping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeoutException;
+//import java.util.concurrent.TimeoutException;
 
 // import java.util.Map;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
+//import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -26,7 +26,7 @@ import com.gravefinder.model.Memorial;
 //import javafx.util.Duration;
 
 import java.time.Duration;
-import org.openqa.selenium.support.ui.WebDriverWait;
+//import org.openqa.selenium.support.ui.WebDriverWait;
 
 // import java.util.regex.Matcher;
 // import java.util.regex.Pattern;

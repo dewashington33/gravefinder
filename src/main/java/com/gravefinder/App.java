@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.gravefinder.csv.CsvWriter;
 import com.gravefinder.model.Cemetery;
 import com.gravefinder.model.Memorial;
 import com.gravefinder.model.Photo;
@@ -31,15 +32,21 @@ public class App extends Application {
     public static void main(String[] args) {
         // Houston Baptist ID is 34627
         // Evergreen Cemetery ID is 33862
+        // Flat Creek Cemetery 2415075 10 memorials
+        // Rutherford Cemetery TN 18068
         // SeleniumScraper scraper = new
         // SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
         // ArrayList<String> memorialLinks = scraper.scrapeMemorialLinks();
         // System.out.println(memorialLinks);
 
         // Scrape memorials
-        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
+        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 18068);
         ArrayList<Memorial> memorials = scraper.scrapeMemorials();
         System.out.println(memorials);
+
+        // Write to CSV
+        CsvWriter csvWriter = new CsvWriter("C:\\Users\\dewas\\Downloads\\", "RutherfordCemetery.csv");
+        csvWriter.writeMemorialsToCsv(memorials);
 
         // Cemetery cemetery =
         // scraper.scrapeCemetery("https://www.findagrave.com/cemetery/33862");

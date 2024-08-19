@@ -40,7 +40,7 @@ public class App extends Application {
         // System.out.println(memorialLinks);
 
         // Scrape memorials
-        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 18068);
+        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
         ArrayList<Memorial> memorials = scraper.scrapeMemorials();
         System.out.println(memorials);
 

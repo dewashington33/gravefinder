@@ -10,42 +10,44 @@ import com.gravefinder.model.Memorial;
 import com.gravefinder.model.Photo;
 import com.gravefinder.scraping.SeleniumScraper;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+// import javafx.application.Application;
+// import javafx.fxml.FXMLLoader;
+// import javafx.scene.Parent;
+// import javafx.scene.Scene;
+// import javafx.stage.Stage;
 
-public class App extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/graveFinderMain.fxml"));
-        // Scene scene = new Scene(root);
-        // primaryStage.setScene(scene);
-        primaryStage.setTitle("Gravefinder");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+public class App {
+    // @Override
+    // public void start(Stage primaryStage) throws Exception {
+    // Parent root =
+    // FXMLLoader.load(getClass().getResource("/fxml/graveFinderMain.fxml"));
+    // // Scene scene = new Scene(root);
+    // // primaryStage.setScene(scene);
+    // primaryStage.setTitle("Gravefinder");
+    // primaryStage.setResizable(false);
+    // primaryStage.setScene(new Scene(root));
+    // primaryStage.show();
 
-    }
+    // }
 
     public static void main(String[] args) {
         // Houston Baptist ID is 34627
         // Evergreen Cemetery ID is 33862
         // Flat Creek Cemetery 2415075 10 memorials
         // Rutherford Cemetery TN 18068
+        // Bason Family Cemetery Houston County - 2405972 22 Memorials
         // SeleniumScraper scraper = new
         // SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
         // ArrayList<String> memorialLinks = scraper.scrapeMemorialLinks();
         // System.out.println(memorialLinks);
 
         // Scrape memorials
-        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 34627);
+        SeleniumScraper scraper = new SeleniumScraper(SeleniumScraper.BrowserType.EDGE, 2405972);
         ArrayList<Memorial> memorials = scraper.scrapeMemorials();
         System.out.println(memorials);
 
         // Write to CSV
-        CsvWriter csvWriter = new CsvWriter("C:\\Users\\dewas\\Downloads\\", "RutherfordCemetery.csv");
+        CsvWriter csvWriter = new CsvWriter("C:\\Users\\dewas\\Downloads\\", "BasonFamilyCemetery.csv");
         csvWriter.writeMemorialsToCsv(memorials);
 
         // Cemetery cemetery =
@@ -87,6 +89,6 @@ public class App extends Application {
 
         // System.out.println(memorial);
 
-        launch(args);
+        // launch(args);
     }
 }
